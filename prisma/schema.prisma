@@ -26,15 +26,31 @@ model User {
   sessions    Session[]
   connections Connection[]
   passkey     Passkey[]
+
+  TableSession TableSession[]
 }
 
 model Table {
   id        Int      @id @default(autoincrement())
   name      String
   inUse     Boolean  @default(false)
+  sessions  TableSession[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model TableSession {
+  id          Int      @id @default(autoincrement())
+  table       Table    @relation(fields: [tableId], references: [id])
+  tableId     Int
+  startedAt   DateTime @default(now())
+  endedAt     DateTime?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 
 model UserImage {
   id        String  @id @default(cuid())

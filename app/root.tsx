@@ -176,7 +176,7 @@ function Document({
 export function Layout({ children }: { children: React.ReactNode }) {
 	// if there was an error running the loader, data could be missing
 	const data = useLoaderData<typeof loader | null>()
-	const nonce = useNonce()
+	const nonce = "static-nonce" // useNonce() //TODO: remove this
 	const theme = useOptionalTheme()
 	return (
 		<Document nonce={nonce} theme={theme} env={data?.ENV}>
