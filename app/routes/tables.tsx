@@ -127,9 +127,8 @@ export default function Tables() {
             >
               {/* Header */}
               <div className="flex items-center gap-2 mb-2">
-                <Icon name="plus" className="h-6 w-6 text-gray-600" />
                 <h2 className="text-xl font-semibold text-gray-800">
-                  Table {table.name}
+                  {table.name}
                 </h2>
               </div>
   

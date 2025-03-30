@@ -40,6 +40,7 @@ import { type Theme, getTheme } from './utils/theme.server.ts'
 import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
 import { useOptionalUser } from './utils/user.ts'
+import { getNonce } from './utils/nonce.sever.ts'
 
 export const links: Route.LinksFunction = () => {
 	return [
@@ -69,6 +70,7 @@ export const meta: Route.MetaFunction = ({ data }) => {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
+	const nonce = getNonce()
 	const timings = makeTimings('root loader')
 	const userId = await time(() => getUserId(request), {
 		timings,
@@ -110,6 +112,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 	return data(
 		{
+			nonce,
 			user,
 			requestInfo: {
 				hints: getHints(request),
@@ -132,6 +135,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	)
 }
 
+// TODO: Add CSP Header (for security)
 export const headers: Route.HeadersFunction = pipeHeaders
 
 function Document({
@@ -176,7 +180,13 @@ function Document({
 export function Layout({ children }: { children: React.ReactNode }) {
 	// if there was an error running the loader, data could be missing
 	const data = useLoaderData<typeof loader | null>()
-	const nonce = "static-nonce" // useNonce() //TODO: remove this
+	const nonce = data?.nonce ?? (
+		process.env.NODE_ENV === "development"
+			? "static-dev-nonce"
+			: (() => {
+					throw new Error("Missing nonce in production")
+			  })()
+	)
 	const theme = useOptionalTheme()
 	return (
 		<Document nonce={nonce} theme={theme} env={data?.ENV}>
