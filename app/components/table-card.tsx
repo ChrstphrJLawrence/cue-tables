@@ -1,4 +1,6 @@
+import { getDurationSince } from "#app/utils/time.ts"
 import { Button } from "./ui/button"
+import { useEffect, useState } from "react"
 import type { Table, TableSession } from "@prisma/client"
 type Props = {
     table: Table & {
@@ -8,6 +10,21 @@ type Props = {
 
 export function TableCard({ table }: Props) {
     const activeSession = table.sessions[0]
+    const [ duration, setDuration ] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (!activeSession) return
+
+        const updateDuration = () => {
+            setDuration(getDurationSince(activeSession.startedAt))
+        }
+
+        updateDuration()
+
+        const interval = setInterval(updateDuration, 60000) // Update every minute
+
+        return () => clearInterval(interval)
+    }, [activeSession])
   
           return (
             <div
@@ -25,7 +42,8 @@ export function TableCard({ table }: Props) {
               {activeSession ? (
                 <p className="text-sm text-gray-600 mb-2">
                   Started at:{" "}
-                  {activeSession.formattedStartedAt}
+                  {activeSession.formattedStartedAt} <br />
+                  In use for: {duration}
                 </p>
               ) : (
                 <p className="text-sm text-gray-400 mb-2">No session in progress</p>
