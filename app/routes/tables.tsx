@@ -3,8 +3,8 @@ import { json } from "@remix-run/server-runtime"
 import { prisma } from "#app/utils/db.server"
 import { useLoaderData } from "react-router"
 import type { Table, TableSession } from "@prisma/client"
-import { TableCard } from "#app/components/table-card.tsx"
-
+import { TableCard } from "#app/components/TableCard.tsx"
+import { LoaderFunctionArgs } from "@remix-run/server-runtime"
 type LoaderData = {
   tables: (Table & {
     sessions: (TableSession & { formattedStartedAt: string })[]
@@ -12,7 +12,7 @@ type LoaderData = {
 }
 
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const tablesRaw = await prisma.table.findMany({
     orderBy: { name: "asc" },
     include: {

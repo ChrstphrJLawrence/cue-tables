@@ -53,6 +53,10 @@ export default defineConfig((config) => ({
 			include: ['app/**/*.{ts,tsx}'],
 			all: true,
 		},
+		environment: 'node',
+		environmentMatchGlobs: [
+			['./app/components/**/*.test.{ts,tsx}', 'jsdom'],
+		]
 	},
 }))
 
