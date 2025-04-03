@@ -116,7 +116,7 @@ async function seed() {
 	
 	await prisma.table.createMany({
 		data: [
-			{ name: 'Table 1', inUse: true },
+			{ name: 'Table 1', inUse: false },
 			{ name: 'Table 2', inUse: false },
 			{ name: 'Table 3', inUse: false },
 			{ name: 'Table 4', inUse: false },
