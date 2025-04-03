@@ -22,46 +22,35 @@ model User {
 
   image       UserImage?
   password    Password?
-  notes       Note[]
   roles       Role[]
   sessions    Session[]
   connections Connection[]
   passkey     Passkey[]
+
+  TableSession TableSession[]
 }
 
-model Note {
-  id      String @id @default(cuid())
-  title   String
-  content String
-
+model Table {
+  id        Int      @id @default(autoincrement())
+  name      String
+  inUse     Boolean  @default(false)
+  sessions  TableSession[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ownerId String
-
-  images NoteImage[]
-
-  // non-unique foreign key
-  @@index([ownerId])
-  // This helps our order by in the user search a LOT
-  @@index([ownerId, updatedAt])
 }
 
-model NoteImage {
-  id        String  @id @default(cuid())
-  altText   String?
-  objectKey String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  noteId String
-
-  // non-unique foreign key
-  @@index([noteId])
+model TableSession {
+  id          Int      @id @default(autoincrement())
+  table       Table    @relation(fields: [tableId], references: [id])
+  tableId     Int
+  startedAt   DateTime @default(now())
+  endedAt     DateTime?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
+
 
 model UserImage {
   id        String  @id @default(cuid())

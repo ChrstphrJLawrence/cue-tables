@@ -55,7 +55,7 @@ test('Users can register and use passkeys', async ({ page, login }) => {
 	// Logout
 	await page.getByRole('link', { name: user.name ?? user.username }).click()
 	await page.getByRole('menuitem', { name: /logout/i }).click()
-	await expect(page).toHaveURL(`/`)
+	await expect(page).toHaveURL(`/tables`)
 
 	// Try logging in with passkey
 	await page.goto('/login')
@@ -106,7 +106,7 @@ test('Users can register and use passkeys', async ({ page, login }) => {
 	// Logout again to test deleted passkey
 	await page.getByRole('link', { name: user.name ?? user.username }).click()
 	await page.getByRole('menuitem', { name: /logout/i }).click()
-	await expect(page).toHaveURL(`/`)
+	await expect(page).toHaveURL(`/tables`)
 
 	// Try logging in with the deleted passkey
 	await page.goto('/login')
