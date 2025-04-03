@@ -2,6 +2,7 @@ import { getDurationSince } from "#app/utils/time.ts"
 import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
 import type { Table, TableSession } from "@prisma/client"
+import { useOptionalUser, userHasRole } from "#app/utils/user"
 type Props = {
     table: Table & {
         sessions: (TableSession & { formattedStartedAt: string })[]
@@ -9,6 +10,7 @@ type Props = {
 }
 
 export function TableCard({ table }: Props) {
+    const user = useOptionalUser()
     const activeSession = table.sessions[0]
     const [ duration, setDuration ] = useState<string | null>(null)
 
@@ -62,25 +64,27 @@ export function TableCard({ table }: Props) {
                   </span>
                 </div>
   
-                {table.inUse ? (
-                  // End session
-                  <form method="POST">
-                    <input type="hidden" name="tableId" value={table.id} />
-                    <input type="hidden" name="endSession" value="true" />
-                    <Button type="submit" variant="destructive">
-                      Mark Available
-                    </Button>
-                  </form>
-                ) : (
-                  // Start session
-                  <form method="POST">
-                    <input type="hidden" name="tableId" value={table.id} />
-                    <input type="hidden" name="currentStatus" value={table.inUse.toString()} />
-                    <Button type="submit" variant="default">
-                      Mark In Use
-                    </Button>
-                  </form>
-                )}
+                {user && userHasRole(user, "admin") ? (
+                  table.inUse ? (
+                    // End session
+                    <form method="POST">
+                      <input type="hidden" name="tableId" value={table.id} />
+                      <input type="hidden" name="endSession" value="true" />
+                      <Button type="submit" variant="destructive">
+                        Mark Available
+                      </Button>
+                    </form>
+                  ) : (
+                    // Start session
+                    <form method="POST">
+                      <input type="hidden" name="tableId" value={table.id} />
+                      <input type="hidden" name="currentStatus" value={table.inUse.toString()} />
+                      <Button type="submit" variant="default">
+                        Mark In Use
+                      </Button>
+                    </form>
+                  )
+                ) : null}
               </div>
             </div>
           )
