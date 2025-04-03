@@ -180,13 +180,7 @@ function Document({
 export function Layout({ children }: { children: React.ReactNode }) {
 	// if there was an error running the loader, data could be missing
 	const data = useLoaderData<typeof loader | null>()
-	const nonce = data?.nonce ?? (
-		process.env.NODE_ENV === "development"
-			? "static-dev-nonce"
-			: (() => {
-					throw new Error("Missing nonce in production")
-			  })()
-	)
+	const nonce = getNonce()
 	const theme = useOptionalTheme()
 	return (
 		<Document nonce={nonce} theme={theme} env={data?.ENV}>
