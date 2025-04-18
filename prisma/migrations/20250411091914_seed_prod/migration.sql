@@ -1,8 +1,8 @@
-INSERT INTO User VALUES('cm9cj99o30000aow03581bpgd','ChrstphrJLawrence@gmail.com','Christopher','Christopher Lawrence',1744360590387,1744360590387);
+INSERT INTO User VALUES('cm9cj99o30000aow03581bpgd','ChrstphrJLawrence@gmail.com','christopher','Christopher Lawrence',1744360590387,1744360590387);
 
 INSERT INTO UserImage VALUES('cm9cj99od0003aow0luebgss9',NULL,'user/kody.png',1744360590398,1744360590398,'cm9cj99o30000aow03581bpgd');
 
-INSERT INTO Password VALUES('$2b$10$8ZQqDuhJX0PgC08HYGgh/eEp2xwTjt2R.IjO2nd5qMtfEN.ZN1Beu','cm9cj99o30000aow03581bpgd');
+INSERT INTO Password VALUES('$2b$10$1SX4QdqRU4OcfK3KA.qbY.Kl7w2/1jR1.bWguC4RbLgGFKaOLQq6e', 'cm9cj99o30000aow03581bpgd');
 
 INSERT INTO Permission (id, action, entity, access, description, createdAt, updatedAt)
 VALUES 
@@ -29,8 +29,6 @@ VALUES
   ('clnf2zvlw000gpcour6dyyuh6','admin','',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),
   ('clnf2zvlx000hpcou5dfrbegs','user','',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
 ON CONFLICT(name) DO NOTHING;
-
-INSERT INTO Connection VALUES('cm9cj99o30001aow0i88yvqms','github','6483432875906615',1744360590387,1744360590387,'cm9cj99o30000aow03581bpgd');
 
 INSERT INTO _PermissionToRole (A, B)
 VALUES
